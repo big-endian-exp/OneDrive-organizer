@@ -1,0 +1,292 @@
+# OneDrive Organizer Configuration
+
+# Authentication settings
+authentication:
+  client_id: "${CLIENT_ID}"  # Azure AD application client ID (from .env)
+  tenant_id: "common"        # Use "common" for personal Microsoft accounts
+  scopes:
+    - "Files.ReadWrite.All"
+    - "User.Read"
+
+# Organization settings
+organization:
+  # Source folder to organize (empty string = root)
+  source_folder: ""  # Scan all folders
+
+  # Destination root folder for organized files
+  destination_root: "Organized_By_Category"  # Testing new category-based organization
+
+  # Date field to use for organization
+  # Options: "createdDateTime" or "lastModifiedDateTime"
+  date_field: "createdDateTime"
+
+  # Folder structure pattern
+  # Available placeholders: {category}, {year}, {month}, {day}, {quarter}
+  # Examples:
+  #   "{year}/{month}" creates "2024/01_January"
+  #   "{category}/{year}/{month}" creates "Finance/2024/01_January"
+  folder_structure: "{category}/{year}/{month}"
+
+  # Filters
+  filters:
+    # Skip files already in organized structure
+    skip_already_organized: true
+
+    # Exclude files with these extensions
+    exclude_extensions:
+      - ".tmp"
+      - ".lock"
+      - ".cache"
+
+    # Only organize files older than this many days (0 = all files)
+    min_age_days: 0
+
+  # Safety settings
+  safety:
+    # Enable dry-run mode by default (safer)
+    dry_run_default: false
+
+    # Require confirmation before moving files
+    require_confirmation: true
+
+    # Maximum files to process per run (prevents accidents)
+    max_files_per_run: 1000  # Ready for full organization
+
+# Categorization settings
+categorization:
+  # Enable content-based categorization
+  enabled: true
+
+  # Default category for files that don't match any rules
+  default_category: "Other"
+
+  # Category definitions
+  # Each category has: keywords (in filename/path), extensions, regex patterns, and priority
+  definitions:
+    Finance:
+      keywords:
+        - invoice
+        - receipt
+        - bill
+        - payment
+        - transaction
+        - bank
+        - statement
+        - tax
+        - expense
+        - budget
+        - payroll
+        - salary
+        - quickbooks
+      extensions: []
+      patterns:
+        - '\d{4}[-_]?\d{2}[-_]?\d{2}.*(?:invoice|receipt|bill)'
+      priority: 60
+
+    Pictures:
+      keywords:
+        - photo
+        - image
+        - picture
+        - img
+        - screenshot
+      extensions:
+        - .jpg
+        - .jpeg
+        - .png
+        - .gif
+        - .bmp
+        - .heic
+        - .webp
+      patterns:
+        - 'IMG_\d+'
+        - 'DSC\d+'
+      priority: 70
+
+    Videos:
+      keywords:
+        - video
+        - movie
+        - clip
+        - recording
+      extensions:
+        - .mp4
+        - .avi
+        - .mov
+        - .mkv
+        - .webm
+      patterns:
+        - 'VID_\d+'
+      priority: 70
+
+    Traffic_Tickets:
+      keywords:
+        - ticket
+        - citation
+        - violation
+        - speeding
+        - parking
+        - traffic
+        - fine
+      extensions: []
+      patterns:
+        - 'ticket.*\d+'
+        - 'citation.*\d+'
+      priority: 80
+
+    Government_Documents:
+      keywords:
+        - passport
+        - license
+        - ssn
+        - birth certificate
+        - tax return
+        - w2
+        - w-2
+        - '1099'
+        - social security
+        - legal
+        - dmv
+        - irs
+      extensions: []
+      patterns:
+        - 'w[-_]?2'
+        - '1099'
+        - 'tax.*return'
+      priority: 90
+
+    Medical:
+      keywords:
+        - medical
+        - health
+        - doctor
+        - hospital
+        - prescription
+        - insurance claim
+        - lab results
+        - vaccine
+      extensions: []
+      patterns:
+        - 'medical.*record'
+        - 'lab.*result'
+      priority: 75
+
+    Insurance:
+      keywords:
+        - insurance
+        - policy
+        - coverage
+        - claim
+        - premium
+      extensions: []
+      patterns:
+        - 'policy.*\d+'
+      priority: 75
+
+    Work:
+      keywords:
+        - work
+        - project
+        - presentation
+        - meeting
+        - report
+        - proposal
+        - resume
+        - cv
+      extensions:
+        - .pptx
+        - .ppt
+        - .xlsx
+        - .xls
+        - .docx
+        - .doc
+      patterns: []
+      priority: 55
+
+    Education:
+      keywords:
+        - school
+        - university
+        - course
+        - homework
+        - assignment
+        - syllabus
+        - transcript
+        - diploma
+      extensions: []
+      patterns: []
+      priority: 60
+
+    Travel:
+      keywords:
+        - travel
+        - trip
+        - vacation
+        - hotel
+        - flight
+        - booking
+        - itinerary
+        - boarding pass
+      extensions: []
+      patterns:
+        - 'booking.*\d+'
+      priority: 65
+
+    Utilities:
+      keywords:
+        - utility
+        - electric
+        - gas
+        - water
+        - internet
+        - phone bill
+      extensions: []
+      patterns: []
+      priority: 60
+
+    Real_Estate:
+      keywords:
+        - property
+        - house
+        - lease
+        - rent
+        - mortgage
+        - deed
+        - real estate
+      extensions: []
+      patterns: []
+      priority: 70
+
+# Scheduling settings
+scheduling:
+  # Enable scheduled automation
+  enabled: false
+
+  # Cron schedule (minute hour day month day_of_week)
+  # Examples:
+  #   "0 2 * * 0"  = 2 AM every Sunday
+  #   "0 2 * * *"  = 2 AM every day
+  #   "0 */6 * * *" = Every 6 hours
+  schedule: "0 2 * * 0"
+
+  # Timezone for schedule
+  timezone: "UTC"
+
+# Logging settings
+logging:
+  # Log level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  level: "INFO"
+
+  # Log to file
+  log_to_file: true
+
+  # Log file path
+  log_file: "data/logs/organizer.log"
+
+# History settings
+history:
+  # Directory for operation history
+  history_dir: "data/history"
+
+  # Auto-cleanup old history (days)
+  cleanup_after_days: 90

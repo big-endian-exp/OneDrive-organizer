@@ -1,0 +1,29 @@
+# Microsoft Authentication Library
+msal>=1.24.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Scheduling
+APScheduler>=3.10.4
+pytz>=2023.3
+
+# Configuration management
+PyYAML>=6.0.1
+
+# Token encryption
+cryptography>=41.0.0
+
+# Date handling
+python-dateutil>=2.8.2
+
+# Enhanced logging
+colorlog>=6.7.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Testing (dev dependencies)
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.11.1
